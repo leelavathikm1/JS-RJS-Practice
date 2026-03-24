@@ -54,10 +54,10 @@
             <button type="button" class="btn-primary" onclick="addUser()">
               Add User
             </button>
-            <button type="button" class="btn-reset">Clear Form</button>
+            <button type="reset" class="btn-reset">Clear Form</button>
           </div>
         </form>
-        <table border="1">
+        <!-- <table border="1">
           <thead>
             <tr>
               <th>Email</th>
@@ -70,8 +70,9 @@
             </tr>
           </thead>
           <tbody></tbody>
-        </table>
+        </table> -->
       </div>
+      <p></p>
 
       <div class="users-section">
         <h2>👥 All Users</h2>
@@ -82,17 +83,16 @@
         </div>
       </div>
     </div>
-
     <script>
-      const url = "http://localhost:3000/users/";
+      const url = "http://localhost:3000/users";
 
       async function addUser() {
         const user = {
           firstName: document.getElementById("firstName").value,
           lastName: document.getElementById("lastName").value,
           email: document.getElementById("email").value,
-          phome: document.getElementById("phone").value,
           city: document.getElementById("city").value,
+          phone: document.getElementById("phone").value,
         };
 
         try {
@@ -103,62 +103,29 @@
               "Content-Type": "Application/JSON",
             },
           });
-
+          console.log(response);
           const results = await response.json();
           getUsers();
-          //   console.log(results);
         } catch (error) {
-          console.log("error");
+          console.log("Error");
         }
       }
 
       let allUsers = [];
       async function getUsers() {
-        try {
-          const response = await fetch(url);
-          const results = await response.json();
-          console.log(results);
-          allUsers = results;
-          results.forEach((user) => {
-            var myTr = document.createElement("tr");
-            console.log(user);
-
-            myTr.innerHTML = `
-            <td>${user.firstName}</td>
-            <td>${user.lastName}</td>
-            <td>${user.email}</td>
-            <td>${user.phone}</td>
-            <td>${user.city}</td>
-            
-            <td><button onclick="handleEdit(${user.id})">Edit</button></td>
-            <td><button onclick="handleDelete(${user.id})">Delete</button></td>`;
-            document.querySelector("tbody").append(myTr);
-          });
-        } catch (error) {
-          console.log(error);
-        }
+        const response = await fetch(url);
+        const results = await response.json();
+        console.log(results);
+        allUsers = results;
+        results.forEach((user) => {
+          var myUl = document.createElement("ul");
+          myUl.innerHTML = `
+            <li>${user.firstName}</li>
+            `;
+          //   document.body.append(myUl);
+          document.querySelector("p").append(myUl);
+        });
       }
-
-      async function handleDelete(id) {
-        console.log(id);
-        try {
-          const response = await fetch(url + id, {
-            method: "DELETE",
-          });
-          const results = await response.json();
-          getUsers();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-
-      function handleEdit(id) {
-        console.log(id);
-        console.log(allUsers);
-        const userEdit = allUsers.find((usr) => id == usr.id);
-        console.log(userEdit);
-      }
-
       getUsers();
     </script>
   </body>
