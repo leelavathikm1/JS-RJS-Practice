@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>User Form</h2>
+      <form>
+        <input type="text" placeholder="First Name" id="fName" required />
+        <input type="text" placeholder="Last Name" id="lName" required />
+        <input type="email" placeholder="Email" id="email" required />
+        <button type="button" onclick="addUser()">Add Users</button>
+      </form>
+      <hr />
+
+      <table border="1">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody" "></tbody>
+      </table>
+    </div>
+    <script>
+      // Type-1
+      //   fetch("http://localhost:3000/users")
+      //     .then((res) => res.json())
+      //     .then((data) => console.log(data));
+
+      //   // Type-2
+      //   async function getData() {
+      //     const response = await fetch("http://localhost:3000/users")
+      //       .then((res) => res.json())
+      //       .then((data) => console.log(data));
+      //   }
+      //   getData();
+
+      // Type-3
+      //   async function getData() {
+      //     try {
+      //       const response = await fetch("http://localhost:3000/users")
+      //         .then((res) => res.json())
+      //         .then((data) => console.log(data));
+      //     } catch (error) {
+      //       console.log(error);
+      //     }
+      //   }
+      //   getData();
+
+      // Type-4
+      //   async function getData() {
+      //     const response = await fetch("http://localhost:3000/users");
+      //     const users = await response.json();
+      //     console.log(users);
+      //   }
+      //   getData();
+
+      // Type-5 Secured API Consuming
+      const url = "http://localhost:3000/users";
+      async function addUser() {
+        const users = {
+          firstName: document.getElementById("fName").value,
+          lastName: document.getElementById("lName").value,
+        };
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(users),
+            headers: {
+              "Content-Type": "Application/JSON",
+            },
+          });
+          const user = await response.json();
+          console.log(user);
+          getUsers();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      let allUsers = [];
+      async function getUsers() {
+        const response = await fetch(url);
+        const results = await response.json();
+        allUsers = results;
+        // console.log(results);
+        // console.log(allUsers);
+        results.forEach((user) => {
+          console.log(user);
+          let myTr = document.createElement("tr");
+          myTr.innerHTML = `
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td><button type="button" onclick="userEdit(${user.id})">Edit</button></td>
+            <td><button type="button" onclick="userDelete(${user.id})">Delete</button></td>
+
+            `;
+          myTr.setAttribute("style", "border: 1px solid black;");
+          document.getElementById("tableBody").appendChild(myTr);
+        });
+      }
+
+    //   async function userDelete(id){
+    //     console.log(id)
+    //     try {
+    //       const response = await fetch(url + id, {
+    //         method: "DELETE",
+    //       });
+    //       const results = await response.json();
+    //       getUsers();
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+
+    //   }
+
+    async function userDelete(id) {
+        console.log(id);
+        try {
+          const response = await fetch(url + id, {
+            method: "DELETE",
+          });
+          const results = await response.json();
+        //   getUsers();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      async function userEdit(id){
+        console.log(id)
+      }
+      getUsers();
+    </script>
+  </body>
+</html>
