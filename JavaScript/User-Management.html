@@ -5,5 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <h1>User Management</h1>
+      <form>
+        <input
+          type="text"
+          placeholder="name"
+          id="name"
+          required
+          onkeyup="validateForm()"
+        />
+        <input
+          type="text"
+          placeholder="Email"
+          id="email"
+          required
+          onkeyup="validateForm()"
+        />
+        <button type="button" disabled>Add User</button>
+      </form>
+      <h2>User List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <thead>
+              Email
+            </thead>
+          </tr>
+        </thead>
+        <tbody>
+          <tr></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      function readValues() {
+        var user = {
+          name: document.getElementById("name").value,
+          email: document.getElementById("email").value,
+        };
+        return user;
+      }
+
+      function validateForm() {
+        const { name, email } = readValues();
+        if (name.length >= 6 && email >= 6) {
+          document.querySelector("button").removeAttribute("disabled", true);
+        } else {
+          document.querySelector("button").setAttribute("disabled", true);
+        }
+      }
+    </script>
+  </body>
 </html>
