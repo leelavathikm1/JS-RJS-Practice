@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Image Gallery</title>
+    <style>
+      #mainImage {
+        width: 400px;
+        height: 250px;
+        object-fit: cover;
+        border: 2px solid black;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .thumb {
+        width: 80px;
+        height: 60px;
+        margin: 5px;
+        cursor: pointer;
+        border: 2px solid transparent;
+      }
+
+      .thumb:hover {
+        border: 2px solid blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Image Gallery</h2>
+
+    <img id="mainImage" src="" alt="Preview" />
+
+    <div id="thumbnails"></div>
+
+    <script>
+      const images = [
+        "https://picsum.photos/id/1015/600/400",
+        "https://picsum.photos/id/1016/600/400",
+        "https://picsum.photos/id/1018/600/400",
+        "https://picsum.photos/id/1020/600/400",
+      ];
+
+      const mainImage = document.getElementById("mainImage");
+      const thumbnailsContainer = document.getElementById("thumbnails");
+
+      function init() {
+        renderThumbnails();
+        setMainImage(images[0]);
+      }
+
+      function renderThumbnails() {
+        thumbnailsContainer.innerHTML = "";
+
+        images.forEach((img, index) => {
+          const imageEl = document.createElement("img");
+          imageEl.src = img;
+          imageEl.classList.add("thumb");
+
+          imageEl.addEventListener("click", () => {
+            setMainImage(img);
+          });
+
+          thumbnailsContainer.appendChild(imageEl);
+        });
+      }
+
+      function setMainImage(src) {
+        mainImage.src = src;
+      }
+
+      init();
+    </script>
+  </body>
+</html>

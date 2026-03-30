@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+  <head>
+    <title>User Profile Manager</title>
+  </head>
+  <body>
+    <h2>User Profile</h2>
+
+    <div id="profile"></div>
+
+    <hr />
+
+    <h3>Update Email</h3>
+    <input id="emailInput" placeholder="Enter new email" />
+    <button onclick="handleEmail()">Update Email</button>
+
+    <h3>Update Age</h3>
+    <input id="ageInput" type="number" placeholder="Enter age" />
+    <button onclick="handleAge()">Update Age</button>
+
+    <h3>Add Property</h3>
+    <input id="keyInput" placeholder="Key" />
+    <input id="valueInput" placeholder="Value" />
+    <button onclick="handleAdd()">Add Property</button>
+
+    <h3>Remove Property</h3>
+    <input id="removeKey" placeholder="Key to remove" />
+    <button onclick="handleRemove()">Remove Property</button>
+
+    <h3>Update City (Nested)</h3>
+    <input id="cityInput" placeholder="City" />
+    <button onclick="handleCity()">Update City</button>
+
+    <script>
+      let user = {
+        name: "John",
+        age: 25,
+        email: "john@example.com",
+        address: {
+          city: "Bangalore",
+        },
+      };
+
+      function render() {
+        document.getElementById("profile").innerText = JSON.stringify(
+          user,
+          null,
+          2,
+        );
+      }
+
+      function updateEmail(user, newEmail) {
+        if (!newEmail.includes("@")) {
+          alert("Invalid email");
+          return user;
+        }
+        return { ...user, email: newEmail };
+      }
+
+      function updateAge(user, newAge) {
+        if (newAge <= 0) {
+          alert("Invalid age");
+          return user;
+        }
+        return { ...user, age: newAge };
+      }
+
+      function addProperty(user, key, value) {
+        return { ...user, [key]: value };
+      }
+
+      function removeProperty(user, key) {
+        const { [key]: _, ...rest } = user;
+        return rest;
+      }
+
+      function updateCity(user, city) {
+        return {
+          ...user,
+          address: {
+            ...user.address,
+            city,
+          },
+        };
+      }
+
+      function handleEmail() {
+        const val = document.getElementById("emailInput").value.trim();
+        user = updateEmail(user, val);
+        render();
+      }
+
+      function handleAge() {
+        const val = Number(document.getElementById("ageInput").value);
+        user = updateAge(user, val);
+        render();
+      }
+
+      function handleAdd() {
+        const key = document.getElementById("keyInput").value.trim();
+        const value = document.getElementById("valueInput").value.trim();
+        user = addProperty(user, key, value);
+        render();
+      }
+
+      function handleRemove() {
+        const key = document.getElementById("removeKey").value.trim();
+        user = removeProperty(user, key);
+        render();
+      }
+
+      function handleCity() {
+        const city = document.getElementById("cityInput").value.trim();
+        user = updateCity(user, city);
+        render();
+      }
+
+      render();
+    </script>
+  </body>
+</html>
