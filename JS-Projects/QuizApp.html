@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Advanced Quiz App</title>
+    <style>
+      body {
+        font-family: Arial;
+      }
+      .option {
+        display: block;
+        margin: 5px 0;
+        cursor: pointer;
+      }
+      .correct {
+        color: green;
+      }
+      .wrong {
+        color: red;
+      }
+      .active {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Advanced Quiz App</h2>
+
+    <div id="app"></div>
+
+    <script>
+      const questions = [
+        {
+          id: 1,
+          question: "What is JavaScript?",
+          options: ["Language", "Database", "OS", "Browser"],
+          answer: "Language",
+        },
+        {
+          id: 2,
+          question: "Which is frontend framework?",
+          options: ["Node", "React", "MongoDB", "Express"],
+          answer: "React",
+        },
+        {
+          id: 3,
+          question: "2 + 5 = ?",
+          options: ["5", "6", "7", "8"],
+          answer: "7",
+        },
+      ];
+
+      let state = {
+        currentIndex: 0,
+        answers: new Array(questions.length).fill(null),
+        submitted: false,
+      };
+
+      const app = document.getElementById("app");
+
+      function render() {
+        const q = questions[state.currentIndex];
+
+        let optionsHTML = "";
+
+        q.options.forEach((opt) => {
+          const isSelected = state.answers[state.currentIndex] === opt;
+
+          let className = "option";
+
+          if (state.submitted) {
+            if (opt === q.answer) className += " correct";
+            else if (isSelected) className += " wrong";
+          }
+
+          optionsHTML += `
+        <label class="${className}">
+          <input type="radio"
+            name="q"
+            ${isSelected ? "checked" : ""}
+            ${state.submitted ? "disabled" : ""}
+            onchange="selectAnswer('${opt}')">
+          ${opt}
+        </label>
+      `;
+        });
+
+        app.innerHTML = `
+      <h3>Q${state.currentIndex + 1}/${questions.length}</h3>
+      <p>${q.question}</p>
+
+      ${optionsHTML}
+
+      <br>
+
+      <button onclick="prev()" ${state.currentIndex === 0 ? "disabled" : ""}>
+        Prev
+      </button>
+
+      <button onclick="next()" ${
+        state.currentIndex === questions.length - 1 ? "disabled" : ""
+      }>
+        Next
+      </button>
+
+      <button onclick="submitQuiz()" ${state.submitted ? "disabled" : ""}>
+        Submit
+      </button>
+
+      <h3>${state.submitted ? getScoreText() : ""}</h3>
+    `;
+      }
+
+      function selectAnswer(answer) {
+        state.answers[state.currentIndex] = answer;
+        render();
+      }
+
+      function next() {
+        if (state.currentIndex < questions.length - 1) {
+          state.currentIndex++;
+          render();
+        }
+      }
+
+      function prev() {
+        if (state.currentIndex > 0) {
+          state.currentIndex--;
+          render();
+        }
+      }
+
+      function submitQuiz() {
+        if (state.answers.includes(null)) {
+          alert("Answer all questions before submitting");
+          return;
+        }
+
+        state.submitted = true;
+        render();
+      }
+
+      function getScore() {
+        let score = 0;
+
+        questions.forEach((q, i) => {
+          if (state.answers[i] === q.answer) score++;
+        });
+
+        return score;
+      }
+
+      function getScoreText() {
+        return `Score: ${getScore()} / ${questions.length}`;
+      }
+
+      render();
+    </script>
+  </body>
+</html>
