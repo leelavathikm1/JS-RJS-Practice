@@ -1,11 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    
-</body>
+  </head>
+  <body>
+    <script>
+      console.log("Start");
+
+      setTimeout(() => {
+        console.log("Macrotask");
+      }, 0);
+
+      Promise.resolve().then(() => {
+        console.log("Microtask");
+      });
+
+      console.log("End");
+    </script>
+  </body>
 </html>

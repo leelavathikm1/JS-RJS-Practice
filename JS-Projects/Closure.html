@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul id="myUl"></ul>
+    <script>
+      function clickCounter() {
+        let count = 0;
+        return {
+          increment: function () {
+            count++;
+            return count;
+          },
+          decrement: function () {
+            count--;
+            return count;
+          },
+        };
+      }
+
+      const counter = clickCounter();
+      console.log(counter.increment());
+      console.log(counter.decrement());
+      const myUl = document.getElementById("myUl");
+      myUl.innerHTML = ` 
+      <li>Increment: ${counter.increment()}</li>
+      <li>Decrement: ${counter.decrement()}</li>
+      `;
+
+      function createClickCounter() {
+        let count = 0;
+        return function () {
+          count++;
+
+          console.log();
+        };
+      }
+    </script>
+  </body>
+</html>
